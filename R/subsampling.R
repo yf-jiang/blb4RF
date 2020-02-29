@@ -1,13 +1,34 @@
 # parameters
-# r --
-# b --
+
+# r -- number of resamples
+# s -- number of subsamples
+# b == n^gamma -- size of each subsample
 # data -- should data be an argument?
 
+non_missing <- data[!is.na(data)]
+n <- length(non_missing)
+s <- n/b
 
+# subsampling
+sub_seqential <- function(s, b, non_missing){
+  n_non_missing <- nrow(non_missing)
+  index <- sample(n_non_missing, n_non_missing, replace = FALSE)
+  cat(index)
+  # subsamples <- list()
+  # for(i in seq_len(s)){
+  #   subsamples[[i]] <- non_missing[index[1:b],]
+  #   index <- index[-c(1:b)]
+  # }
+  # *** needs to be rewritten in functional programming due to the inefficiency of using OOP
 
-# subsample
-sub_seqential <- function(n, data){
-  non_missing <- data[!is.na(data)]
+  subsamples <- seq_len(s) %>% map(function(i){
+    non_missing[index[1:b],]
+    index <- index[-c(1:b)]
+  })
+  subsamples
+}
+
+resampling <- function(r, b, n, subsamples){
   freqs <- rmultinom(1, n, rep(1, length(non_missing_data)))
   # implement RF
 }
