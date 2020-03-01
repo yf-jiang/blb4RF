@@ -14,18 +14,18 @@ sub_seqential <- function(s, b, non_missing){
   n_non_missing <- nrow(non_missing)
   index <- sample(n_non_missing, n_non_missing, replace = FALSE)
   cat(index)
-  # subsamples <- list()
-  # for(i in seq_len(s)){
-  #   subsamples[[i]] <- non_missing[index[1:b],]
-  #   index <- index[-c(1:b)]
-  # }
+  subsamples <- list()
+  for(i in seq_len(s)){
+    subsamples[[i]] <- non_missing[index[1:b],]
+    index <- index[-c(1:b)]
+  }
   # *** needs to be rewritten in functional programming due to the inefficiency of using OOP
 
-  subsamples <- seq_len(s) %>% map(function(i){
-    non_missing[index[1:b],]
-    index <- index[-c(1:b)]
-  })
-  subsamples
+  # subsamples <- seq_len(s) %>% map(function(i){
+  #   non_missing[index[1:b],]
+  #   index <- index[-c(1:b)]
+  # })
+  return(subsamples)
 }
 
 resampling <- function(r, b, n, subsamples){
