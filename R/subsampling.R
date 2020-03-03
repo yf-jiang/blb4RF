@@ -6,19 +6,21 @@
 # data -- should data be an argument?
 
 non_missing <- data[!is.na(data)]
-n <- length(non_missing)
+n <- length(data)
 s <- n/b
 
 # subsampling
 sub_seqential <- function(s, b, non_missing){
   n_non_missing <- nrow(non_missing)
   index <- sample(n_non_missing, n_non_missing, replace = FALSE)
-  cat(index)
+
+  # alternatively, these part might be rewritten in c++ to improve the performance
   subsamples <- list()
   for(i in seq_len(s)){
     subsamples[[i]] <- non_missing[index[1:b],]
     index <- index[-c(1:b)]
   }
+
   # *** needs to be rewritten in functional programming due to the inefficiency of using OOP
 
   # subsamples <- seq_len(s) %>% map(function(i){
@@ -28,14 +30,16 @@ sub_seqential <- function(s, b, non_missing){
   return(subsamples)
 }
 
-resampling <- function(r, b, n, subsamples){
-  freqs <- rmultinom(1, n, rep(1, length(non_missing_data)))
-  # implement RF
-}
 
-sub_parallel <- function(cl, n, data){
+
+# parameters
+
+# r -- number of resamples
+# s -- number of subsamples
+# b == n^gamma -- size of each subsample
+# data -- should data be an argument?
+sub_parallel <- function(cl, s, b, non_missing){
   library(parallel)
-  non_missing <- data[!is.na(data)]
   clusterExport(cl, data)
 
   invisible(clusterEvalQ(cl, {
@@ -62,4 +66,10 @@ sub_parallel <- function(cl, n, data){
     data[freqs, ]
     # implement RF
   })
+}
+
+# resampling
+resampling <- function(r, b, n, subsamples){
+  freqs <- rmultinom(1, n, rep(1, length(non_missing_data)))
+  # implement RF
 }
