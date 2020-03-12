@@ -1,5 +1,4 @@
 # parameters
-
 # r -- number of resamples
 # s -- number of subsamples
 # b == n^gamma -- size of each subsample
@@ -10,7 +9,7 @@ n <- nrow(data)
 s <- n/b
 
 # subsampling
-sub_seqential <- function(s, b, non_missing){
+subsampling <- function(s, b, non_missing){
   n_non_missing <- nrow(non_missing)
   index <- sample(n_non_missing, n_non_missing, replace = FALSE)
 
