@@ -100,14 +100,22 @@ sigma.blb4lm <- function(object, confidence, level){
 # export
 # to predict y given inputs
 predict.blb4lm <- function(object, new_data, confidence, level){
+  regression_model <- object$formula
+
   model_coefs <- coef.blb4lm(object, confidence = FALSE)
   temp_predict <- apply(new_data, 1, function(d){d*model_coefs[-1]})
+
+  # the case that regression model has multiple predictors
   y_predict <- model_coefs[1] + apply(temp_predict, 2, sum)
+
+
+  # the case the model only have one predictor
+
 
   if (confidence == TRUE){
     coef_confint <- coef.blb4lm(object, confidence = TRUE, level = level)$coefficients_confidence_interval
     int_intercept <- coef_confint[1,]
-    int_x <- apply(coef_confint[,-1], 1, function(i){
+    int_x <- apply(as.matrix(coef_confint[,-1]), 1, function(i){
       apply(new_data, 1, function(d){sum(d*i)})
       })
     int_y <- apply(int_x, 1, function(int){int + int_intercept})
@@ -139,23 +147,27 @@ get_sigma <- function(l){
   map_dbl(l, function(x){x$sigma})
 }
 
-predic_int <- function(l, intercept_int){
-  apply(l, 1, function(x){x + intercept_int})
-}
+
 # test code
 library(tidyverse)
 n <- 1e6
 
 test <- blb4lm(mpg~hp+wt, 3, 100, mtcars)
+test1 <- blb4lm(y~x, 100, 10, part1)
 
 test_c = coef.blb4lm(test, confidence = TRUE, level = 0.95)
+test_c1 <- coef.blb4lm(test1, confidence = TRUE, level = 0.95)
+
+new_data <- as.matrix(mtcars[c(1:5),c(4,6)])
+new_data1 = part2[c(1:10),1]
 
 sig = test$estimates %>% map(get_sigma)
 
 
-new_data <- as.matrix(mtcars[c(1:5),])
+
 new_data = new_data[,c(4, 6)]
 pred <- test_c$coefficients_confidence_interval
+pred1 <- test_c1$coefficients_confidence_interval
 # predict.blb4lm
 temp <- test_c$coefficients_confidence_interval[,-1] %>% map(., ~.*new_data) %>% reduce(cbind)
 func_predict <- function(m){
