@@ -2,16 +2,16 @@
 % Please edit documentation in R/resampling.R
 \name{sigma.blb4lm}
 \alias{sigma.blb4lm}
-\title{Claculating sigma from blb4lm}
+\title{Calculating sigma from blb4lm}
 \usage{
-\method{sigma}{blb4lm}(object, confidence, level, ...)
+\method{sigma}{blb4lm}(object, confidence = FALSE, level = 0.95, ...)
 }
 \arguments{
 \item{object}{The output from the function blb4lm}
 
-\item{confidence}{Whether the user needs a confidence interval}
+\item{confidence}{Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.}
 
-\item{level}{The level of significance}
+\item{level}{The level of significance. Default is 0.95.}
 
 \item{...}{Additional arguments to be passed to other functions}
 }
@@ -19,5 +19,5 @@
 sigma, or the confidence intervals of the sigma
 }
 \description{
-Claculating sigma from blb4lm
+Calculating sigma from blb4lm
 }

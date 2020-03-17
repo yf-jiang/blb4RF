@@ -1,16 +1,17 @@
 #' @import stats
 #' @import purrr
+#' @import furrr
+#' @import future
 #' @import utils
-utils::globalVariables(".")
-#' @details Bag of Little Bootstrap for Linear Regression
 
-# parameters
-# formula -- the regression formula
-# s -- number of subsamples
-# r -- number of bootstrap resamples
-# data -- "training" data
-# parallel -- the option to make parallization using furrr
-
+#' @title blb4lm: Implement bag of little bootstrap on Linear regression
+#' @aliases blb4lm-package
+#' @details
+#' The package contains function: blb4lm(), coef.blb4lm(), sigma.blb4lm(), predict.blb4lm().
+#' These functions can help users quickly apply bag of little bootstrap on linear regression
+#' to get the estimates of coefficients and their standard deviation. Also, users and predict
+#' new data with the new model.
+"_PACKAGE"
 
 #' @name blb4lm
 #' @title Bag of Little Bootstrap for Linear Regression
@@ -18,10 +19,14 @@ utils::globalVariables(".")
 #' @param s Number of subsamples
 #' @param r Times of resampling
 #' @param data A data frame
+#' @param parallel Whether to use parallel (TRUR/FALSE)
+#' @param num_cores How many cores to use in parallel
 #' @return A list of list of coefficients and sigma
+#' @details
+#' Split the training data into s parts and resampling r times; then fit lm model for each resamples.
 #' @export
 
-blb4lm <- function(formula, s, r, data, parallel, num_cores){
+blb4lm <- function(formula, s, r, data, parallel = FALSE, num_cores = NULL){
   n <- nrow(data)
   subsamples <- subsampling(data, s)
 
@@ -78,24 +83,24 @@ print.blb4lm <- function(object) {
   print(object)
 }
 
+utils::globalVariables(".")
+
 #' @name coef.blb4lm
 #' @title Calculating coefficients from blb4lm
 #' @param object The output from the function blb4lm
-#' @param confidence Whether the user needs a confidence interval
-#' @param level The level of significance
+#' @param confidence Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.
+#' @param level The level of significance. Default is 0.95.
 #' @param ... Additional arguments to be passed to other functions
 #' @return The coeffiecients, or the confidence intervals of the coefficients
 #' @export
 # function to calculate model coefficients
-coef.blb4lm <- function(object, confidence, level,...){
+coef.blb4lm <- function(object, confidence = FALSE, level = 0.95, ...){
   # only coefficients
   coef_eachSub <- object$estimate %>% map(get_coef)
   coef_result <- coef_eachSub %>% map(mean_coef) %>% reduce(`+`) / length(coef_eachSub)
 
   # with confidence interval
   if(confidence == TRUE){
-    q1 <- (1 - level)/2
-    q2 <- (1 + level)/2
     quantile_eachSub <- coef_eachSub %>% map(., ~coef_quant(., level))
     coef_confint <- quantile_eachSub %>% reduce(`+`) / length(quantile_eachSub)
     res <- list(model_coefficients = coef_result, coefficients_confidence_interval = coef_confint)
@@ -107,15 +112,15 @@ coef.blb4lm <- function(object, confidence, level,...){
 }
 
 #' @name sigma.blb4lm
-#' @title Claculating sigma from blb4lm
+#' @title Calculating sigma from blb4lm
 #' @param object The output from the function blb4lm
-#' @param confidence Whether the user needs a confidence interval
-#' @param level The level of significance
+#' @param confidence Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.
+#' @param level The level of significance. Default is 0.95.
 #' @param ... Additional arguments to be passed to other functions
 #' @return sigma, or the confidence intervals of the sigma
 #' @export
 # function to calculate sigma
-sigma.blb4lm <- function(object, confidence, level,...){
+sigma.blb4lm <- function(object, confidence = FALSE, level = 0.95,...){
   sigma_eachSub <- object$estimate %>% map(get_sigma)
   sigma_result <- sigma_eachSub %>% map(mean) %>% reduce(`+`) / length(sigma_eachSub)
 
@@ -132,10 +137,18 @@ sigma.blb4lm <- function(object, confidence, level,...){
   }
 }
 
+#' @name predict.blb4lm
+#' @title Predict for new data after doing blb4lm
+#' @param object The output from the function blb4lm
+#' @param new_data A data frame
+#' @param confidence Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.
+#' @param level The level of significance. Default is 0.95.
+#' @param ... Additional arguments to be passed to other functions
+#' @return sigma, or the confidence intervals of the sigma
 #' @export
 # to predict y given inputs
 
-predict.blb4lm <- function(object, new_data, confidence, level){
+predict.blb4lm <- function(object, new_data, confidence = FALSE, level = 0.95, ...){
 
   X <- model.matrix(reformulate(attr(terms(object$formula), "term.labels")), new_data)
 
