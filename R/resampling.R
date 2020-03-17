@@ -5,18 +5,20 @@
 # data -- "training" data
 # parallel -- the option to make parallization using furrr
 
-
-
-blb4lm <- function(formula, s, r, data){
-  # if(is.na(data) == TRUE){
-  #   message("NA are present in the data and it's removed")
-  #   data <- data[!is.na(data)]
-  #   n <- nrow(non_missing)
-  # }
-
+blb4lm <- function(formula, s, r, data, parallel, num_cores){
   n <- nrow(data)
   subsamples <- subsampling(data, s)
-  model_est <- map(subsamples, ~resampleBuild(r, n, ., formula))
+
+  if (parallel == TRUE){
+    plan(multiprocess, workers = num_cores)
+    model_est <- future_map(subsamples, ~resampleBuild(r, n, ., formula))
+  }
+  else if(parallel == FALSE){
+    model_est <- map(subsamples, ~resampleBuild(r, n, ., formula))
+  }
+  else{
+    warning("parallel parameter has to be logical")
+  }
 
   res <- list(estimates = model_est, formula = formula)
   class(res) <- "blb4lm"
@@ -88,7 +90,8 @@ sigma.blb4lm <- function(object, confidence, level){
   if(confidence == TRUE){
     q1 <- (1 - level)/2
     q2 <- (1 + level)/2
-    sigma_confint <- sigma_eachSub %>% map(., ~quantile(., c(q1, q2))) %>% reduce(`+`) / length(sigma_eachSub)
+    sigma_confint <- sigma_eachSub %>% map(., ~quantile(., c(q1, q2))) %>% reduce(`+`) /
+      length(sigma_eachSub)
     res <- list(Sigma = sigma_result, Sigma_Confidence_Interval = sigma_confint)
     return(res)
   }
@@ -100,25 +103,20 @@ sigma.blb4lm <- function(object, confidence, level){
 # export
 # to predict y given inputs
 predict.blb4lm <- function(object, new_data, confidence, level){
-  regression_model <- object$formula
+
+  X <- model.matrix(reformulate(attr(terms(object$formula), "term.labels")), new_data)
 
   model_coefs <- coef.blb4lm(object, confidence = FALSE)
   temp_predict <- apply(new_data, 1, function(d){d*model_coefs[-1]})
 
   # the case that regression model has multiple predictors
-  y_predict <- model_coefs[1] + apply(temp_predict, 2, sum)
-
-
-  # the case the model only have one predictor
-
+  y_predict <- apply(new_data, 1, function(d){sum(d*model_coefs)})
 
   if (confidence == TRUE){
     coef_confint <- coef.blb4lm(object, confidence = TRUE, level = level)$coefficients_confidence_interval
-    int_intercept <- coef_confint[1,]
-    int_x <- apply(as.matrix(coef_confint[,-1]), 1, function(i){
-      apply(new_data, 1, function(d){sum(d*i)})
+    int_y <- apply(coef_confint, 1, function(i){
+      apply(X, 1, function(d){sum(d*i)})
       })
-    int_y <- apply(int_x, 1, function(int){int + int_intercept})
 
     res <- list(response = y_predict, response_interval = int_y)
     return(res)
@@ -159,19 +157,9 @@ test_c = coef.blb4lm(test, confidence = TRUE, level = 0.95)
 test_c1 <- coef.blb4lm(test1, confidence = TRUE, level = 0.95)
 
 new_data <- as.matrix(mtcars[c(1:5),c(4,6)])
-new_data1 = part2[c(1:10),1]
+new_data1 = as.data.frame(part2[c(1:10),1])
 
 sig = test$estimates %>% map(get_sigma)
 
-
-
-new_data = new_data[,c(4, 6)]
 pred <- test_c$coefficients_confidence_interval
 pred1 <- test_c1$coefficients_confidence_interval
-# predict.blb4lm
-temp <- test_c$coefficients_confidence_interval[,-1] %>% map(., ~.*new_data) %>% reduce(cbind)
-func_predict <- function(m){
-
-
-
-}
