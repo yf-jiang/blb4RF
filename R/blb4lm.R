@@ -19,19 +19,17 @@
 #' @param s Number of subsamples
 #' @param r Times of resampling
 #' @param data A data frame
-#' @param parallel Whether to use parallel (TRUR/FALSE)
-#' @param num_cores How many cores to use in parallel
+#' @param parallel Whether to use parallel (TRUR/FALSE). If you want use parallel, type "plan(multiprocess, workers = num_cores)" in console first.
 #' @return A list of list of coefficients and sigma
 #' @details
 #' Split the training data into s parts and resampling r times; then fit lm model for each resamples.
 #' @export
 
-blb4lm <- function(formula, s, r, data, parallel = FALSE, num_cores = NULL){
+blb4lm <- function(formula, s, r, data, parallel = FALSE){
   n <- nrow(data)
   subsamples <- subsampling(data, s)
 
   if (parallel == TRUE){
-    plan(multiprocess, workers = num_cores)
     model_est <- future_map(subsamples, ~resampleBuild(r, n, ., formula))
   }
   else if(parallel == FALSE){

@@ -4,7 +4,7 @@
 \alias{blb4lm}
 \title{Bag of Little Bootstrap for Linear Regression}
 \usage{
-blb4lm(formula, s, r, data, parallel = FALSE, num_cores = NULL)
+blb4lm(formula, s, r, data, parallel = FALSE)
 }
 \arguments{
 \item{formula}{The formula for linear regression}
@@ -15,9 +15,7 @@ blb4lm(formula, s, r, data, parallel = FALSE, num_cores = NULL)
 
 \item{data}{A data frame}
 
-\item{parallel}{Whether to use parallel (TRUR/FALSE)}
-
-\item{num_cores}{How many cores to use in parallel}
+\item{parallel}{Whether to use parallel (TRUR/FALSE). If you want use parallel, type "plan(multiprocess, workers = num_cores)" in console first.}
 }
 \value{
 A list of list of coefficients and sigma
