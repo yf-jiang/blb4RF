@@ -1,9 +1,25 @@
+#' @import stats
+#' @import purrr
+#' @import utils
+utils::globalVariables(".")
+#' @details Bag of Little Bootstrap for Linear Regression
+
 # parameters
 # formula -- the regression formula
 # s -- number of subsamples
 # r -- number of bootstrap resamples
 # data -- "training" data
 # parallel -- the option to make parallization using furrr
+
+
+#' @name blb4lm
+#' @title Bag of Little Bootstrap for Linear Regression
+#' @param formula The formula for linear regression
+#' @param s Number of subsamples
+#' @param r Times of resampling
+#' @param data A data frame
+#' @return A list of list of coefficients and sigma
+#' @export
 
 blb4lm <- function(formula, s, r, data, parallel, num_cores){
   n <- nrow(data)
@@ -62,15 +78,24 @@ print.blb4lm <- function(object) {
   print(object)
 }
 
-# export
+#' @name coef.blb4lm
+#' @title Calculating coefficients from blb4lm
+#' @param object The output from the function blb4lm
+#' @param confidence Whether the user needs a confidence interval
+#' @param level The level of significance
+#' @param ... Additional arguments to be passed to other functions
+#' @return The coeffiecients, or the confidence intervals of the coefficients
+#' @export
 # function to calculate model coefficients
-coef.blb4lm <- function(object, confidence, level){
+coef.blb4lm <- function(object, confidence, level,...){
   # only coefficients
   coef_eachSub <- object$estimate %>% map(get_coef)
   coef_result <- coef_eachSub %>% map(mean_coef) %>% reduce(`+`) / length(coef_eachSub)
 
   # with confidence interval
   if(confidence == TRUE){
+    q1 <- (1 - level)/2
+    q2 <- (1 + level)/2
     quantile_eachSub <- coef_eachSub %>% map(., ~coef_quant(., level))
     coef_confint <- quantile_eachSub %>% reduce(`+`) / length(quantile_eachSub)
     res <- list(model_coefficients = coef_result, coefficients_confidence_interval = coef_confint)
@@ -81,9 +106,16 @@ coef.blb4lm <- function(object, confidence, level){
   }
 }
 
-# export
+#' @name sigma.blb4lm
+#' @title Claculating sigma from blb4lm
+#' @param object The output from the function blb4lm
+#' @param confidence Whether the user needs a confidence interval
+#' @param level The level of significance
+#' @param ... Additional arguments to be passed to other functions
+#' @return sigma, or the confidence intervals of the sigma
+#' @export
 # function to calculate sigma
-sigma.blb4lm <- function(object, confidence, level){
+sigma.blb4lm <- function(object, confidence, level,...){
   sigma_eachSub <- object$estimate %>% map(get_sigma)
   sigma_result <- sigma_eachSub %>% map(mean) %>% reduce(`+`) / length(sigma_eachSub)
 
@@ -100,8 +132,9 @@ sigma.blb4lm <- function(object, confidence, level){
   }
 }
 
-# export
+#' @export
 # to predict y given inputs
+
 predict.blb4lm <- function(object, new_data, confidence, level){
 
   X <- model.matrix(reformulate(attr(terms(object$formula), "term.labels")), new_data)
@@ -146,20 +179,11 @@ get_sigma <- function(l){
 }
 
 
-# test code
-library(tidyverse)
-n <- 1e6
-
-test <- blb4lm(mpg~hp+wt, 3, 100, mtcars)
-test1 <- blb4lm(y~x, 100, 10, part1)
-
+test <- blb4lm(mpg~hp+wt, 3, 300, mtcars)
 test_c = coef.blb4lm(test, confidence = TRUE, level = 0.95)
-test_c1 <- coef.blb4lm(test1, confidence = TRUE, level = 0.95)
-
+test_s = sigma.blb4lm(test, confidence = TRUE, level = 0.95)
 new_data <- as.matrix(mtcars[c(1:5),c(4,6)])
-new_data1 = as.data.frame(part2[c(1:10),1])
 
 sig = test$estimates %>% map(get_sigma)
+sigma.blb4lm(test,TRUE,0.95)
 
-pred <- test_c$coefficients_confidence_interval
-pred1 <- test_c1$coefficients_confidence_interval
