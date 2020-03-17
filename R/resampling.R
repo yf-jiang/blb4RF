@@ -8,8 +8,8 @@
 #' @aliases blb4lm-package
 #' @details
 #' The package contains function: blb4lm(), coef.blb4lm(), sigma.blb4lm(), predict.blb4lm().
-#' These functions can help users quickly apply bag of little bootstrap on linear regression
-#' to get the estimates of coefficients and their standard deviation. Also, users and predict
+#'     These functions can help users quickly apply bag of little bootstrap on linear regression
+#' to get the estimates of coefficients and their standard deviation. Also, users can predict
 #' new data with the new model.
 "_PACKAGE"
 

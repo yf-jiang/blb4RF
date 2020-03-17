@@ -2,10 +2,10 @@ Package: blb4lm
 Title: Bag of Little Bootstrap for Linear Model
 Version: 0.0.0.9000
 Authors@R: 
-    person("Zhihao", "Chen", email = "czhchen@ucdavis.edu", role = c("aut", "cre"))
-    person("Yifeng", "Jiang", email = "yifjiang@ucdavis.edu", role = c("aut", "cre"))
-    person("Shenglun", "Wu", email = "shlwu@ucdavis.edu", role = c("aut", "cre"))
-    person("Qiushuang", "Xu", email = "qsxu@ucdavis.edu", role = c("aut", "cre"))
+    c(person("Zhihao", "Chen", email = "czhchen@ucdavis.edu", role = c("aut","cre")),
+    person("Yifeng", "Jiang", email = "yifjiang@ucdavis.edu", role = c("aut")),
+    person("Shenglun", "Wu", email = "shlwu@ucdavis.edu", role = c("ctb")),
+    person("Qiushuang", "Xu", email = "qsxu@ucdavis.edu", role = c("ctb")))
 Description: Implement bag of little bootstrap on linear regression model. 
     It returns coefficients, sigma, and prediction given new data along with their confidence intervals.
 License: MIT + file LICENSE

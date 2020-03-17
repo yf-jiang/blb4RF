@@ -11,11 +11,22 @@ Implement bag of little bootstrap on linear regression model.
 }
 \details{
 The package contains function: blb4lm(), coef.blb4lm(), sigma.blb4lm(), predict.blb4lm().
-These functions can help users quickly apply bag of little bootstrap on linear regression
-to get the estimates of coefficients and their standard deviation. Also, users and predict
+    These functions can help users quickly apply bag of little bootstrap on linear regression
+to get the estimates of coefficients and their standard deviation. Also, users can predict
 new data with the new model.
 }
 \author{
-\strong{Maintainer}: Qiushuang Xu \email{qsxu@ucdavis.edu}
+\strong{Maintainer}: Zhihao Chen \email{czhchen@ucdavis.edu}
+
+Authors:
+\itemize{
+  \item Yifeng Jiang \email{yifjiang@ucdavis.edu}
+}
+
+Other contributors:
+\itemize{
+  \item Shenglun Wu \email{shlwu@ucdavis.edu} [contributor]
+  \item Qiushuang Xu \email{qsxu@ucdavis.edu} [contributor]
+}
 
 }
