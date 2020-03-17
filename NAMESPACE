@@ -2,6 +2,7 @@
 
 S3method(coef,blb4lm)
 S3method(predict,blb4lm)
+S3method(print,blb4lm)
 S3method(sigma,blb4lm)
 export(blb4lm)
 import(furrr)

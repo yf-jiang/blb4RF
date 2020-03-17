@@ -1,7 +1,13 @@
-print.blb4lm <- function(object, ...) {
+#' @name print.blb4lm
+#' @title Print the formula of blb4lm
+#' @param x The output from the function blb4lm
+#' @param ... Additional arguments to be passed to other functions
+#' @return The formula of linear regression used in blb4lm
+#' @export
+print.blb4lm <- function(x, ...) {
   cat("class: blb4lm", sep = "\n")
   cat("regression formula: ")
-  print(object$formula)
+  print(x$formula)
 }
 
 utils::globalVariables(".")
