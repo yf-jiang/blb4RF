@@ -16,11 +16,11 @@ to get the estimates of coefficients and their standard deviation. Also, users c
 new data with the new model.
 }
 \author{
-\strong{Maintainer}: Zhihao Chen \email{czhchen@ucdavis.edu}
+\strong{Maintainer}: Yifeng Jiang \email{yifjiang@ucdavis.edu}
 
 Authors:
 \itemize{
-  \item Yifeng Jiang \email{yifjiang@ucdavis.edu}
+  \item Zhihao Chen \email{czhchen@ucdavis.edu}
 }
 
 Other contributors:
