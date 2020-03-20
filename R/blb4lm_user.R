@@ -89,7 +89,7 @@ sigma.blb4lm <- function(object, confidence = FALSE, level = 0.95,...){
 #' @name predict.blb4lm
 #' @title Prediction for new data after doing blb4lm
 #' @param object The output list of the function blb4lm
-#' @param new_data A data frame
+#' @param new_data A data frame or matrix
 #' @param confidence Whether the output should include a confidence interval (TRUE/FALSE). Default is 'FALSE'.
 #' @param level The level of significance. Default is 0.95.
 #' @param ... Additional arguments to be passed to other functions

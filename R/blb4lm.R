@@ -15,11 +15,12 @@
 #' @param formula The formula for linear regression, using ~ operator
 #' @param s Number of subsamples
 #' @param r Times of resampling performed on each subsample
-#' @param data A data frame
-#' @param parallel Logical indicating whether parallel computation should be used. See 'details'.
+#' @param data Data frame or matrix. See 'details'
+#' @param parallel Logical indicating whether parallel computation should be used. Default is TRUE. See 'details'.
 #' @return A list of list of coefficients and sigma
 #' @details
 #' Split the training data into s parts and resampling r times for each part; then fit lm model given the formula for each resamples.
+#' The input data shouldn't contain NAs in response and predict variables. If you see warnings "longer object length is not a multiple of shorter object length", check for the NAs.
 #' If you choose to use parallel computation, use "plan(multiprocess, workers = number of cores you want to use)" from furrr package first.
 #' @export
 
