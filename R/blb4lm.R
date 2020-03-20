@@ -4,13 +4,13 @@
 #' @import future
 #' @import utils
 
-#' @title blb4lm: Implement bag of little bootstrap on Linear regression
+#' @title blb4lm: Implementation of Bag of Little Bootstrap for Linear Regression
 #' @aliases blb4lm-package
 #' @details
 #' The package contains function: blb4lm(), coef.blb4lm(), sigma.blb4lm(), predict.blb4lm().
 #'     These functions can help users quickly apply bag of little bootstrap on linear regression
-#' to get the estimates of coefficients and their standard deviation. Also, users can predict
-#' new data with the new model.
+#' to get the model of coefficients and standard deviation. Also, users can predict response variable when
+#' new data is given.
 "_PACKAGE"
 
 #' @name blb4lm
@@ -19,13 +19,16 @@
 #' @param s Number of subsamples
 #' @param r Times of resampling
 #' @param data A data frame
-#' @param parallel Whether to use parallel (TRUR/FALSE). If you want use parallel, type "plan(multiprocess, workers = num_cores)" in console first.
+#' @param parallel Whether to use parallel (TRUR/FALSE). True is set as default and the user
+#'  should use "plan()" from furrr package first.
 #' @return A list of list of coefficients and sigma
 #' @details
-#' Split the training data into s parts and resampling r times; then fit lm model for each resamples.
+#' Split the training data into s subsamples and resampling r times; then fit lm model for each resamples.
+#' The result is stored as a list of list of two vectors.
 #' @export
 
-blb4lm <- function(formula, s, r, data, parallel = FALSE){
+blb4lm <- function(formula, s, r, data, parallel = TRUE){
+
   n <- nrow(data)
   subsamples <- subsampling(data, s)
 

@@ -4,7 +4,7 @@
 \alias{blb4lm}
 \title{Bag of Little Bootstrap for Linear Regression}
 \usage{
-blb4lm(formula, s, r, data, parallel = FALSE)
+blb4lm(formula, s, r, data, parallel = TRUE)
 }
 \arguments{
 \item{formula}{The formula for linear regression}
@@ -15,7 +15,8 @@ blb4lm(formula, s, r, data, parallel = FALSE)
 
 \item{data}{A data frame}
 
-\item{parallel}{Whether to use parallel (TRUR/FALSE). If you want use parallel, type "plan(multiprocess, workers = num_cores)" in console first.}
+\item{parallel}{Whether to use parallel (TRUR/FALSE). True is set as default and the user
+should use "plan()" from furrr package first.}
 }
 \value{
 A list of list of coefficients and sigma
@@ -24,5 +25,6 @@ A list of list of coefficients and sigma
 Bag of Little Bootstrap for Linear Regression
 }
 \details{
-Split the training data into s parts and resampling r times; then fit lm model for each resamples.
+Split the training data into s subsamples and resampling r times; then fit lm model for each resamples.
+The result is stored as a list of list of two vectors.
 }
