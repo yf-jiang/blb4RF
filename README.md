@@ -1,4 +1,4 @@
-# blb4lm (Bag of Little Bootstrp for Linear Regresion) #
+# Bag of Little Bootstrp for Linear Regresion (blb4lm) #
 
 # Description #
 
