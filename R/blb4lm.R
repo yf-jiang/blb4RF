@@ -8,21 +8,19 @@
 #' @aliases blb4lm-package
 #' @details
 #' The package contains function: blb4lm(), coef.blb4lm(), sigma.blb4lm(), predict.blb4lm().
-#'     These functions can help users quickly apply bag of little bootstrap on linear regression
-#' to get the estimates of coefficients and their standard deviation. Also, users can predict
-#' new data with the new model.
 "_PACKAGE"
 
 #' @name blb4lm
 #' @title Bag of Little Bootstrap for Linear Regression
-#' @param formula The formula for linear regression
+#' @param formula The formula for linear regression, using ~ operator
 #' @param s Number of subsamples
-#' @param r Times of resampling
+#' @param r Times of resampling performed on each subsample
 #' @param data A data frame
-#' @param parallel Whether to use parallel (TRUR/FALSE). If you want use parallel, type "plan(multiprocess, workers = num_cores)" in console first.
+#' @param parallel Logical indicating whether parallel computation should be used. See 'details'.
 #' @return A list of list of coefficients and sigma
 #' @details
-#' Split the training data into s parts and resampling r times; then fit lm model for each resamples.
+#' Split the training data into s parts and resampling r times for each part; then fit lm model given the formula for each resamples.
+#' If you choose to use parallel computation, use "plan(multiprocess, workers = number of cores you want to use)" from furrr package first.
 #' @export
 
 blb4lm <- function(formula, s, r, data, parallel = FALSE){

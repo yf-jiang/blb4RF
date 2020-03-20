@@ -2,24 +2,24 @@
 % Please edit documentation in R/blb4lm_user.R
 \name{predict.blb4lm}
 \alias{predict.blb4lm}
-\title{Predict for new data after doing blb4lm}
+\title{Prediction for new data after doing blb4lm}
 \usage{
 \method{predict}{blb4lm}(object, new_data, confidence = FALSE, level = 0.95, ...)
 }
 \arguments{
-\item{object}{The output from the function blb4lm}
+\item{object}{The output list of the function blb4lm}
 
 \item{new_data}{A data frame}
 
-\item{confidence}{Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.}
+\item{confidence}{Whether the output should include a confidence interval (TRUE/FALSE). Default is 'FALSE'.}
 
 \item{level}{The level of significance. Default is 0.95.}
 
 \item{...}{Additional arguments to be passed to other functions}
 }
 \value{
-sigma, or the confidence intervals of the sigma
+predicted value (and confidence interval) of response variable
 }
 \description{
-Predict for new data after doing blb4lm
+Prediction for new data after doing blb4lm
 }

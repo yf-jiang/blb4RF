@@ -16,7 +16,7 @@
 \item{...}{Additional arguments to be passed to other functions}
 }
 \value{
-The coeffiecients, or the confidence intervals of the coefficients
+The coeffiecients of the linear model, or the confidence intervals of the coefficients
 }
 \description{
 Calculating coefficients from blb4lm

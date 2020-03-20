@@ -6,14 +6,11 @@
 \alias{_PACKAGE}
 \title{blb4lm: Implement bag of little bootstrap on Linear regression}
 \description{
-Implement bag of little bootstrap on linear regression model. 
-    It returns coefficients, sigma, and prediction given new data along with their confidence intervals.
+Implement bag of little bootstrap on a given linear regression model. 
+    The outputs returns coefficients and sigma of the model, and predicted values given new data along with their confidence intervals.
 }
 \details{
 The package contains function: blb4lm(), coef.blb4lm(), sigma.blb4lm(), predict.blb4lm().
-    These functions can help users quickly apply bag of little bootstrap on linear regression
-to get the estimates of coefficients and their standard deviation. Also, users can predict
-new data with the new model.
 }
 \author{
 \strong{Maintainer}: Yifeng Jiang \email{yifjiang@ucdavis.edu}

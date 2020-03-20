@@ -6,8 +6,8 @@ Authors@R:
     person("Yifeng", "Jiang", email = "yifjiang@ucdavis.edu", role = c("aut","cre")),
     person("Shenglun", "Wu", email = "shlwu@ucdavis.edu", role = c("ctb")),
     person("Qiushuang", "Xu", email = "qsxu@ucdavis.edu", role = c("ctb")))
-Description: Implement bag of little bootstrap on linear regression model. 
-    It returns coefficients, sigma, and prediction given new data along with their confidence intervals.
+Description: Implement bag of little bootstrap on a given linear regression model. 
+    The outputs returns coefficients and sigma of the model, and predicted values given new data along with their confidence intervals.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
