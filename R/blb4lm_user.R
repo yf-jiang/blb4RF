@@ -29,7 +29,7 @@ utils::globalVariables(".")
 #' @param confidence Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.
 #' @param level The level of significance. Default is 0.95.
 #' @param ... Additional arguments to be passed to other functions
-#' @return The coeffiecients, or the confidence intervals of the coefficients
+#' @return The coeffiecients of the linear model, or the confidence intervals of the coefficients
 #' @export
 
 # function to calculate model coefficients
@@ -87,13 +87,13 @@ sigma.blb4lm <- function(object, confidence = FALSE, level = 0.95,...){
 }
 
 #' @name predict.blb4lm
-#' @title Predict for new data after doing blb4lm
-#' @param object The output from the function blb4lm
+#' @title Prediction for new data after doing blb4lm
+#' @param object The output list of the function blb4lm
 #' @param new_data A data frame
-#' @param confidence Whether the user needs a confidence interval (TRUE/FALSE). Default is 'FALSE'.
+#' @param confidence Whether the output should include a confidence interval (TRUE/FALSE). Default is 'FALSE'.
 #' @param level The level of significance. Default is 0.95.
 #' @param ... Additional arguments to be passed to other functions
-#' @return sigma, or the confidence intervals of the sigma
+#' @return predicted value (and confidence interval) of response variable
 #' @export
 
 # function to predict y given inputs

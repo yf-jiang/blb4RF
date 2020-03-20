@@ -7,16 +7,20 @@
 blb4lm(formula, s, r, data, parallel = TRUE)
 }
 \arguments{
-\item{formula}{The formula for linear regression}
+\item{formula}{The formula for linear regression, using ~ operator}
 
 \item{s}{Number of subsamples}
 
-\item{r}{Times of resampling}
+\item{r}{Times of resampling performed on each subsample}
 
 \item{data}{A data frame}
 
+<<<<<<< HEAD
+\item{parallel}{Logical indicating whether parallel computation should be used. See 'details'.}
+=======
 \item{parallel}{Whether to use parallel (TRUR/FALSE). True is set as default and the user
 should use "plan()" from furrr package first.}
+>>>>>>> d536085dccc7a55c7f61065074d61723b4584b2e
 }
 \value{
 A list of list of coefficients and sigma
@@ -25,6 +29,11 @@ A list of list of coefficients and sigma
 Bag of Little Bootstrap for Linear Regression
 }
 \details{
+<<<<<<< HEAD
+Split the training data into s parts and resampling r times for each part; then fit lm model given the formula for each resamples.
+If you choose to use parallel computation, use "plan(multiprocess, workers = number of cores you want to use)" from furrr package first.
+=======
 Split the training data into s subsamples and resampling r times; then fit lm model for each resamples.
 The result is stored as a list of list of two vectors.
+>>>>>>> d536085dccc7a55c7f61065074d61723b4584b2e
 }
