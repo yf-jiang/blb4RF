@@ -90,10 +90,10 @@ predict.blb4lm <- function(object, new_data, confidence = FALSE, level = 0.95, .
   X <- model.matrix(reformulate(attr(terms(object$formula), "term.labels")), new_data)
 
   model_coefs <- coef.blb4lm(object, confidence = FALSE)
-  temp_predict <- apply(new_data, 1, function(d){d*model_coefs[-1]})
-
+  # temp_predict <- apply(new_data, 1, function(d){d*model_coefs[-1]})
   # the case that regression model has multiple predictors
-  y_predict <- apply(new_data, 1, function(d){sum(d*model_coefs)})
+
+  y_predict <- apply(X, 1, function(d){sum(d*model_coefs)})
 
   if (confidence == TRUE){
     coef_confint <- coef.blb4lm(object, confidence = TRUE, level = level)$coefficients_confidence_interval
